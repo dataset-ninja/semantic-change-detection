@@ -13,58 +13,89 @@ from dataset_tools.templates import (
 ##################################
 # * Before uploading to instance #
 ##################################
-PROJECT_NAME: str = None
-PROJECT_NAME_FULL: str = None
+PROJECT_NAME: str = "HRSCD"
+PROJECT_NAME_FULL: str = "HRSCD: High Resolution Semantic Change Detection"
 HIDE_DATASET = True  # set False when 100% sure about repo quality
 
 ##################################
 # * After uploading to instance ##
 ##################################
-LICENSE: License = None
-APPLICATIONS: List[Union[Industry, Domain, Research]] = None
-CATEGORY: Category = None
+LICENSE: License = License.CC_BY_NC_SA_4_0()
+APPLICATIONS: List[Union[Industry, Domain, Research]] = [
+    Domain.Geospatial(),
+    Industry.SearchAndRescue(is_used=False),
+    Industry.Environmental(is_used=False),
+]
+CATEGORY: Category = Category.Aerial(extra=[Category.Environmental(), Category.Satellite()])
 
-CV_TASKS: List[CVTask] = None
-ANNOTATION_TYPES: List[AnnotationType] = None
+CV_TASKS: List[CVTask] = [CVTask.SemanticSegmentation()]
+ANNOTATION_TYPES: List[AnnotationType] = [AnnotationType.SemanticSegmentation()]
 
-RELEASE_DATE: Optional[str] = None  # e.g. "YYYY-MM-DD"
+RELEASE_DATE: Optional[str] = "2019-08-28"  # e.g. "YYYY-MM-DD"
 if RELEASE_DATE is None:
     RELEASE_YEAR: int = None
 
-HOMEPAGE_URL: str = None
+HOMEPAGE_URL: str = "https://rcdaudt.github.io/hrscd/"
 # e.g. "https://some.com/dataset/homepage"
 
-PREVIEW_IMAGE_ID: int = None
+PREVIEW_IMAGE_ID: int = 16540212
 # This should be filled AFTER uploading images to instance, just ID of any image.
 
-GITHUB_URL: str = None
+GITHUB_URL: str = "https://github.com/dataset-ninja/semantic-change-detection"
 # URL to GitHub repo on dataset ninja (e.g. "https://github.com/dataset-ninja/some-dataset")
 
 ##################################
 ### * Optional after uploading ###
 ##################################
-DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = None
+DOWNLOAD_ORIGINAL_URL: Optional[Union[str, dict]] = (
+    "https://www.kaggle.com/datasets/javidtheimmortal/high-resolution-semantic-change-detection-dataset/download?datasetVersionNumber=1"
+)
+
 # Optional link for downloading original dataset (e.g. "https://some.com/dataset/download")
 
-CLASS2COLOR: Optional[Dict[str, List[str]] | Literal["predefined"]] = "predefined"
+CLASS2COLOR: Optional[Dict[str, List[str]] or Literal["predefined"]] = {
+    "water": [230, 25, 75],
+    "wetlands": [60, 180, 75],
+    "forests": [255, 225, 25],
+    "agricultural areas": [0, 130, 200],
+    "artificial surfaces": [245, 130, 48],
+    "no information": [145, 30, 180],
+    "change": [70, 240, 240],
+    "no change": [240, 50, 230],
+}
 # If specific colors for classes are needed, fill this dict (e.g. {"class1": [255, 0, 0], "class2": [0, 255, 0]})
 
 # If you have more than the one paper, put the most relatable link as the first element of the list
-# Use dict key to specify name for a button
-PAPER: Optional[Union[str, List[str], Dict[str, str]]] = None
-BLOGPOST: Optional[Union[str, List[str], Dict[str, str]]] = None
+PAPER: Optional[Union[str, List[str]]] = "https://rcdaudt.github.io/files/2018cviu-hrscd.pdf"
+BLOGPOST: Optional[Union[str, List[str]]] = None
 REPOSITORY: Optional[Union[str, List[str], Dict[str, str]]] = {
-    "GitHub": "some_link_to_repo_if_exists"
+    "Kaggle": "https://www.kaggle.com/datasets/javidtheimmortal/high-resolution-semantic-change-detection-dataset"
 }
 
 CITATION_URL: Optional[str] = None
-AUTHORS: Optional[List[str]] = None
-AUTHORS_CONTACTS: Optional[List[str]] = None
+AUTHORS: Optional[List[str]] = [
+    "Rodrigo Caye Daudt",
+    "Bertrand Le Saux",
+    "Alexandre Boulch",
+    "Yann Gousseau",
+]
+AUTHORS_CONTACTS: Optional[List[str]] = [
+    "rodrigo.cayedaudt@geod.baug.ethz.ch",
+    "bertrand.le_saux@onera.fr",
+    "alexandre.boulch@valeo.com",
+    "yann.gousseau@telecom-paris.fr",
+]
 
-ORGANIZATION_NAME: Optional[Union[str, List[str]]] = None
-ORGANIZATION_URL: Optional[Union[str, List[str]]] = None
+ORGANIZATION_NAME: Optional[Union[str, List[str]]] = [
+    "Universite Paris-Saclay, France",
+    "Telecom ParisTech, France",
+]
+ORGANIZATION_URL: Optional[Union[str, List[str]]] = [
+    "https://www.universite-paris-saclay.fr/",
+    "https://www.telecom-paris.fr/",
+]
 
-# Set '__PRETEXT__' or '__POSTTEXT__' as a key with string value to add custom text. e.g. SLYTAGSPLIT = {'__POSTTEXT__':'some text}
+# Set '__PRETEXT__' or '__POSTTEXT__' as a key with value:str to add custom text. e.g. SLYTAGSPLIT = {'__POSTTEXT__':'some text}
 SLYTAGSPLIT: Optional[Dict[str, Union[List[str], str]]] = None
 TAGS: Optional[
     List[
@@ -123,10 +154,8 @@ def get_settings():
     settings["class2color"] = CLASS2COLOR
     settings["paper"] = PAPER
     settings["blog"] = BLOGPOST
-    settings["repository"] = REPOSITORY
     settings["citation_url"] = CITATION_URL
     settings["authors"] = AUTHORS
-    settings["authors_contacts"] = AUTHORS_CONTACTS
     settings["organization_name"] = ORGANIZATION_NAME
     settings["organization_url"] = ORGANIZATION_URL
     settings["slytagsplit"] = SLYTAGSPLIT
